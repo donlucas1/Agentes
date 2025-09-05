@@ -1,88 +1,35 @@
-# 📊 Agente Analista Interactivo con LM Studio Local
+# 🌍 Turismo Multi-Agente
 
-Este proyecto implementa un agente analista interactivo que utiliza un modelo de lenguaje local (a través de LM Studio) para analizar datos de un CSV y generar visualizaciones y análisis estadísticos automáticamente.
+Aplicación ejemplo para planificar viajes utilizando tres agentes especializados:
 
-## 🛠 Tecnologías utilizadas
-- Python 3.x
-- Pandas (para manipulación de datos)
-- Matplotlib y Seaborn (para visualizaciones)
-- OpenAI API (conectado a LM Studio local)
-- Re (expresiones regulares)
+1. **Alojamiento** – busca opciones de hospedaje (Airbnb/Booking).
+2. **Visitas turísticas** – sugiere atracciones en la ciudad usando OpenTripMap.
+3. **Requisitos de viaje** – consulta necesidades de visado y pasaporte con TravelBriefing.
 
-## 🔌 Configuración requerida
-```python
-import openai
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import time
-import re
+La aplicación expone una API REST construida con [FastAPI](https://fastapi.tiangolo.com/) y está lista para desplegarse en [Railway](https://railway.app/).
 
-# Configuración para LM Studio local
-openai.api_key = "not-needed"
-openai.api_base = "http://localhost:1234/v1"  # Asegúrate de usar el puerto correcto
-```
+## 🚀 Uso
 
-## 🚀 Cómo usar el agente
-
-### 1. Inicialización
-```python
-agente = AgenteAnalistaInteractivo("ruta/a/tu/archivo.csv")
-```
-
-### 2. Hacer consultas
-El agente puede responder preguntas como:
-```python
-# Visualización básica
-agente.responder_y_ejecutar("¿Podés mostrar un gráfico de barras con las ventas por región?")
-
-# Análisis temporal
-agente.responder_y_ejecutar("¿Cómo varían las ventas mensuales?")
-
-# Estadísticas completas
-agente.responder_y_ejecutar("Necesito todos los datos estadísticos que puedas generar")
-```
-
-## 📈 Funcionalidades principales
-
-### Carga y exploración inicial de datos
-- Carga automática del CSV
-- Detección de tipos de datos
-- Visualización de estructura básica
-
-### Generación de código automático
-- Creación de visualizaciones (gráficos de barras, líneas, etc.)
-- Análisis temporal (tendencias mensuales)
-- Estadísticas descriptivas completas:
-  - Media, mediana, moda
-  - Desviación estándar y varianza
-  - Cuartiles y rango intercuartílico
-  - Coeficiente de variación
-
-### Ejecución segura
-- Extracción de código mediante expresiones regulares
-- Ejecución en entorno controlado
-- Manejo de errores
-
-## 📋 Ejemplo de salida
-El agente proporciona:
-1. Confirmación de carga de datos
-2. Estructura de columnas
-3. Tiempo de respuesta
-4. Código generado
-5. Resultados/visualizaciones
-
-## ⚠️ Requisitos previos
-1. Tener LM Studio ejecutándose localmente
-2. Tener cargado un modelo compatible (ej. Mistral)
-3. Instalar las dependencias con:
 ```bash
-pip install pandas matplotlib seaborn openai
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Iniciar servidor de desarrollo
+uvicorn app.main:app --reload
 ```
 
-## 📌 Notas importantes
-- El agente solo genera y ejecuta código Python relacionado con análisis de datos
-- Para preguntas complejas, el modelo podría necesitar ajustes en el prompt
-- Se recomienda verificar siempre el código generado antes de usarlo en producción
+### Endpoints principales
+- `GET /accommodation?city=Barcelona&check_in=2024-01-01&check_out=2024-01-05`
+- `GET /sightseeing?city=Barcelona`
+- `GET /requirements?country_from=ARG&country_to=ESP`
 
-Este proyecto demuestra cómo integrar modelos de lenguaje local con análisis de datos para crear herramientas interactivas de análisis.
+Para producción en Railway se incluye un `Procfile` con el comando apropiado.
+
+## 🔑 Variables de entorno
+Algunos proveedores necesitan claves de API:
+
+- `AIRBNB_API_KEY` – Clave del proveedor de alojamiento elegido.
+- `OPENTRIPMAP_API_KEY` – Requerida para obtener atracciones turísticas.
+
+## 📄 Licencia
+MIT
